@@ -4,9 +4,18 @@ module ActiveJob
   module Cancel
     module QueueAdapters
       class SidekiqAdapter
-        def self.cancel(job_id, queue_name)
-          queue = Sidekiq::Queue.new(queue_name)
-          queue.each { |job| job.delete if job.jid == job_id }
+        class << self
+          def cancel(job_id, queue_name)
+            result = false
+            queue = Sidekiq::Queue.new(queue_name)
+            job = queue.find_job(job_id)
+
+            if job
+              job.delete
+              result = true
+            end
+            result
+          end
         end
       end
     end
