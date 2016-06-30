@@ -5,21 +5,41 @@ module ActiveJob::Cancel::QueueAdapters
   class ActiveJob::Cancel::QueueAdapters::SidekiqAdapterTest< Minitest::Test
     def setup
       ActiveJob::Base.queue_adapter = :sidekiq
-      @queue = Sidekiq::Queue.new('active_job_cancel_test')
     end
 
     def teardown
-      @queue.clear
     end
 
-    def test_sidekiq_adapter
-      assert_equal 0, @queue.size
+    def test_queued_job
+      queue = Sidekiq::Queue.new('active_job_cancel_test')
+      assert_equal 0, queue.size
 
       HelloJob.perform_later
-      assert_equal 1, @queue.size
+      assert_equal 1, queue.size
 
-      HelloJob.cancel(@queue.first['jid'])
-      assert_equal 0, @queue.size
+      HelloJob.cancel(queue.first['jid'])
+      assert_equal 0, queue.size
+    ensure
+      queue.clear
+    end
+
+    def test_scheduled_job
+      assert_equal 0, scheduled_jobs.size
+
+      HelloJob.set(wait: 30.seconds).perform_later
+      assert_equal 1, scheduled_jobs.size
+
+      HelloJob.cancel(scheduled_jobs.first['jid'])
+      assert_equal 0, scheduled_jobs.size
+    ensure
+      scheduled_jobs.map(&:delete)
+    end
+
+    def scheduled_jobs
+      scheduled_set = Sidekiq::ScheduledSet.new
+      scheduled_set.select do |scheduled_job|
+        scheduled_job.args.first['queue_name'] == 'active_job_cancel_test'
+      end
     end
   end
 end
