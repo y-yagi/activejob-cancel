@@ -24,7 +24,11 @@ module ActiveJob
         end
 
         def adapter
-          self.queue_adapter.name.demodulize.chomp('Adapter')
+          if ActiveJob.version > Gem::Version.new('4.3')
+            self.queue_adapter.class.name.demodulize.chomp('Adapter')
+          else
+            self.queue_adapter.name.demodulize.chomp('Adapter')
+          end
         end
 
         def adapter_class

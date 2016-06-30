@@ -1,0 +1,6 @@
+source 'https://rubygems.org'
+
+gem 'rake'
+gem 'sidekiq'
+gem 'activesupport', '~> 5.0.0rc2'
+gem 'activejob', '~> 5.0.0rc2'
