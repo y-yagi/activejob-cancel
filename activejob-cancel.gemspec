@@ -9,6 +9,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["yuuji.yaginuma@gmail.com"]
 
   spec.summary       = %q{activejob-cancel provides cancel method to Active Job}
+  spec.homepage      = "https://github.com/y-yagi/activejob-cancel"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
