@@ -1,5 +1,5 @@
 require 'active_support'
-require 'active_job/core'
+require 'active_job'
 require 'active_job/cancel/queue_adapters'
 require 'active_job/cancel/version'
 
@@ -45,4 +45,4 @@ module ActiveJob
   end
 end
 
-ActiveJob::Core.include(ActiveJob::Cancel)
+ActiveJob::Base.include(ActiveJob::Cancel)
