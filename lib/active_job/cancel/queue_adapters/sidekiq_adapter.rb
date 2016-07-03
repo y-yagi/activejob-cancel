@@ -5,7 +5,7 @@ module ActiveJob
     module QueueAdapters
       class SidekiqAdapter
         def cancel(job_id, queue_name)
-          job = find_from_queue(job_id, queue_name) || find_from_scheduled_set(job_id, queue_name)
+          job = find_job_from_queue(job_id, queue_name) || find_job_from_scheduled_set(job_id)
 
           if job
             job.delete
@@ -14,15 +14,29 @@ module ActiveJob
           false
         end
 
-        def find_from_queue(job_id, queue_name)
-          queue = Sidekiq::Queue.new(queue_name)
-          queue.detect { |j| j.args.first['job_id'] == job_id }
+        def cancel_by(opts, queue_name)
+          raise ArgumentError, 'Please specify ":provider_job_id"' unless opts[:provider_job_id]
+          job_id = opts[:provider_job_id]
+
+          job = Sidekiq::Queue.new(queue_name).find_job(job_id) || Sidekiq::ScheduledSet.new.find_job(job_id)
+
+          if job
+            job.delete
+            return true
+          end
+          false
         end
 
-        def find_from_scheduled_set(job_id, queue_name)
-          scheduled_set = Sidekiq::ScheduledSet.new
-          scheduled_set.detect { |j| j.args.first['job_id'] == job_id && j.args.first['queue_name'] == queue_name }
-        end
+        private
+          def find_job_from_queue(job_id, queue_name)
+            queue = Sidekiq::Queue.new(queue_name)
+            queue.detect { |j| j.args.first['job_id'] == job_id }
+          end
+
+          def find_job_from_scheduled_set(job_id)
+            scheduled_set = Sidekiq::ScheduledSet.new
+            scheduled_set.detect { |j| j.args.first['job_id'] == job_id }
+          end
       end
     end
   end

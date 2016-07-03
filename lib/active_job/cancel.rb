@@ -26,6 +26,14 @@ module ActiveJob
         end
       end
 
+      def cancel_by(opts)
+        if supported_adapter?
+          adapter_class.new.cancel_by(opts, self.queue_name)
+        else
+          raise NotImplementedError, 'This queueing backend does not support cancel_by.'
+        end
+      end
+
       def supported_adapter?
         SUPPORTED_ADAPTERS.include?(adapter)
       end
