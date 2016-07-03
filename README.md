@@ -29,8 +29,17 @@ class HelloJob < ActiveJob::Base
   def perform
   end
 end
+```
 
-HelloJob.cancel(job id)
+```ruby
+job = HelloJob.perform_later
+job.cancel
+```
+
+Or
+
+```ruby
+HelloJob.cancel(job id) # You must use the job id that Active Job provided.
 ```
 
 ## Contributing
