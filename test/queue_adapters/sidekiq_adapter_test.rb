@@ -10,36 +10,62 @@ module ActiveJob::Cancel::QueueAdapters
     def teardown
     end
 
-    def test_queued_job
+    def test_queued_job_with_instance_method
       queue = Sidekiq::Queue.new('active_job_cancel_test')
       assert_equal 0, queue.size
 
-      HelloJob.perform_later
+      job = HelloJob.perform_later
       assert_equal 1, queue.size
 
-      HelloJob.cancel(queue.first['jid'])
+      job.cancel
       assert_equal 0, queue.size
     ensure
       queue.clear
     end
 
-    def test_scheduled_job
+    def test_queued_job_with_class_method
+      queue = Sidekiq::Queue.new('active_job_cancel_test')
+      assert_equal 0, queue.size
+
+      job = HelloJob.perform_later
+      assert_equal 1, queue.size
+
+      HelloJob.cancel(job.job_id)
+      assert_equal 0, queue.size
+    ensure
+      queue.clear
+    end
+
+    def test_scheduled_job_with_instance_method
       assert_equal 0, scheduled_jobs.size
 
-      HelloJob.set(wait: 30.seconds).perform_later
+      job = HelloJob.set(wait: 30.seconds).perform_later
       assert_equal 1, scheduled_jobs.size
 
-      HelloJob.cancel(scheduled_jobs.first['jid'])
+      job.cancel
       assert_equal 0, scheduled_jobs.size
     ensure
       scheduled_jobs.map(&:delete)
     end
 
-    def scheduled_jobs
-      scheduled_set = Sidekiq::ScheduledSet.new
-      scheduled_set.select do |scheduled_job|
-        scheduled_job.args.first['queue_name'] == 'active_job_cancel_test'
-      end
+    def test_scheduled_job_with_instance_method
+      assert_equal 0, scheduled_jobs.size
+
+      job = HelloJob.set(wait: 30.seconds).perform_later
+      assert_equal 1, scheduled_jobs.size
+
+      HelloJob.cancel(job.job_id)
+      assert_equal 0, scheduled_jobs.size
+    ensure
+      scheduled_jobs.map(&:delete)
     end
+
+    private
+      def scheduled_jobs
+        scheduled_set = Sidekiq::ScheduledSet.new
+        scheduled_set.select do |scheduled_job|
+          scheduled_job.args.first['queue_name'] == 'active_job_cancel_test'
+        end
+      end
   end
 end
