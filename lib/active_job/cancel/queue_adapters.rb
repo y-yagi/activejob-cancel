@@ -4,6 +4,7 @@ module ActiveJob
       extend ActiveSupport::Autoload
 
       autoload :SidekiqAdapter
+      autoload :DelayedJobAdapter
     end
   end
 end
