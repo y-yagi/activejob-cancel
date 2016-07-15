@@ -45,7 +45,7 @@ module ActiveJob::Cancel::QueueAdapters
     def test_cancel_with_provider_job_id
       assert_equal 0, Delayed::Job.count
 
-      job = HelloJob.perform_later
+      HelloJob.perform_later
       assert_equal 1, Delayed::Job.count
 
       HelloJob.cancel_by(provider_job_id: Delayed::Job.first.id)
@@ -54,4 +54,4 @@ module ActiveJob::Cancel::QueueAdapters
       Delayed::Job.destroy_all
     end
   end
- end
+end

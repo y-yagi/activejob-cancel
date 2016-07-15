@@ -68,7 +68,7 @@ module ActiveJob::Cancel::QueueAdapters
       queue = Sidekiq::Queue.new('active_job_cancel_test')
       assert_equal 0, queue.size
 
-      job = HelloJob.perform_later
+      HelloJob.perform_later
       assert_equal 1, queue.size
 
       queue = Sidekiq::Queue.new(HelloJob.queue_name)
@@ -81,7 +81,7 @@ module ActiveJob::Cancel::QueueAdapters
     def test_cancel_scheduled_job_with_provider_job_id
       assert_equal 0, scheduled_jobs.size
 
-      job = HelloJob.set(wait: 30.seconds).perform_later
+      HelloJob.set(wait: 30.seconds).perform_later
       assert_equal 1, scheduled_jobs.size
 
       HelloJob.cancel_by(provider_job_id: scheduled_jobs.map.first.jid)
