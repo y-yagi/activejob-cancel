@@ -1,6 +1,6 @@
 # ActiveJob::Cancel
 
-`activejob-cancel` provides cancel method to Active Job. Only `Sidekiq` is it currently support.
+`activejob-cancel` provides cancel method to Active Job. Currently it supports only `Sidekiq` and `Delayed Job`.
 
 [![Build Status](https://travis-ci.org/y-yagi/activejob-cancel.svg?branch=master)](https://travis-ci.org/y-yagi/activejob-cancel)
 [![Gem Version](https://badge.fury.io/rb/activejob-cancel.svg)](http://badge.fury.io/rb/activejob-cancel)
@@ -40,6 +40,12 @@ Or
 
 ```ruby
 HelloJob.cancel(job id) # You must use the job id that Active Job provided.
+```
+
+If you want to use an id that backend job provided, use the `cancel_by` method.
+
+```ruby
+HelloJob.cancel_by(provider_job_id: job_id)
 ```
 
 ## Contributing
