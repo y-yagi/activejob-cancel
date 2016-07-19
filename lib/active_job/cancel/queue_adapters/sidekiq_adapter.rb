@@ -49,7 +49,7 @@ module ActiveJob
           end
 
           def find_job_from_retry_set(job_id)
-            scheduled_set = Sidekiq::Retry.new
+            scheduled_set = Sidekiq::RetrySet.new
             scheduled_set.detect { |j| j.args.first['job_id'] == job_id }
           end
       end

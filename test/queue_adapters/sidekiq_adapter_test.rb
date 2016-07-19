@@ -1,5 +1,6 @@
 require 'test_helper'
 require 'sidekiq/api'
+require 'support/sidekiq/test_helper'
 
 module ActiveJob::Cancel::QueueAdapters
   class ActiveJob::Cancel::QueueAdapters::SidekiqAdapterTest< Minitest::Test
@@ -60,6 +61,38 @@ module ActiveJob::Cancel::QueueAdapters
       scheduled_jobs.map(&:delete)
     end
 
+    def test_cancel_retries_job_with_instance_method
+      assert_equal 0, retries_jobs.size
+
+      job = nil
+      execute_with_launcher do
+        job = FailJob.perform_later
+      end
+      sleep 2  # wait for the launcher to run the job
+      assert_equal 1, retries_jobs.size
+
+      job.cancel
+      assert_equal 0, retries_jobs.size
+    ensure
+      retries_jobs.map(&:delete)
+    end
+
+    def test_cancel_retries_job_with_class_method
+      assert_equal 0, retries_jobs.size
+
+      job = nil
+      execute_with_launcher do
+        job = FailJob.perform_later
+      end
+      sleep 2  # wait for the launcher to run the job
+      assert_equal 1, retries_jobs.size
+
+      FailJob.cancel(job.job_id)
+      assert_equal 0, retries_jobs.size
+    ensure
+      retries_jobs.map(&:delete)
+    end
+
     def test_cancel_by_with_invalid_parameters
       assert_raises(ArgumentError) { HelloJob.cancel_by(id: 1) }
     end
@@ -95,6 +128,13 @@ module ActiveJob::Cancel::QueueAdapters
         scheduled_set = Sidekiq::ScheduledSet.new
         scheduled_set.select do |scheduled_job|
           scheduled_job.args.first['queue_name'] == 'active_job_cancel_test'
+        end
+      end
+
+      def retries_jobs
+        retry_set = Sidekiq::RetrySet.new
+        retry_set.select do |retry_job|
+          retry_job.args.first['queue_name'] == 'active_job_cancel_failed_job'
         end
       end
   end

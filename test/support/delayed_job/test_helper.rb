@@ -1,6 +1,7 @@
+ActiveRecord::Base.logger = Logger.new(nil)
+
 def setup_db
   ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: ':memory:')
-  ActiveRecord::Base.logger = Logger.new(nil)
 
   ActiveRecord::Schema.define do
     create_table :delayed_jobs, force: true do |t|
