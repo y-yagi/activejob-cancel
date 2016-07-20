@@ -62,14 +62,13 @@ module ActiveJob::Cancel::QueueAdapters
     end
 
     def test_cancel_retries_job_with_instance_method
-      retries_jobs.map(&:delete)
       assert_equal 0, retries_jobs.size
 
       job = nil
       execute_with_launcher do
         job = FailJob.perform_later
+        sleep 1  # wait for the launcher to run the job
       end
-      sleep 3  # wait for the launcher to run the job
       assert_equal 1, retries_jobs.size
 
       job.cancel
@@ -79,14 +78,13 @@ module ActiveJob::Cancel::QueueAdapters
     end
 
     def test_cancel_retries_job_with_class_method
-      retries_jobs.map(&:delete)
       assert_equal 0, retries_jobs.size
 
       job = nil
       execute_with_launcher do
         job = FailJob.perform_later
+        sleep 1  # wait for the launcher to run the job
       end
-      sleep 3  # wait for the launcher to run the job
       assert_equal 1, retries_jobs.size
 
       FailJob.cancel(job.job_id)
