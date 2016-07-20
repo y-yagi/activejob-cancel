@@ -68,7 +68,7 @@ module ActiveJob::Cancel::QueueAdapters
       execute_with_launcher do
         job = FailJob.perform_later
       end
-      sleep 2  # wait for the launcher to run the job
+      sleep 3  # wait for the launcher to run the job
       assert_equal 1, retries_jobs.size
 
       job.cancel
@@ -84,7 +84,7 @@ module ActiveJob::Cancel::QueueAdapters
       execute_with_launcher do
         job = FailJob.perform_later
       end
-      sleep 2  # wait for the launcher to run the job
+      sleep 3  # wait for the launcher to run the job
       assert_equal 1, retries_jobs.size
 
       FailJob.cancel(job.job_id)
