@@ -62,6 +62,7 @@ module ActiveJob::Cancel::QueueAdapters
     end
 
     def test_cancel_retries_job_with_instance_method
+      retries_jobs.map(&:delete)
       assert_equal 0, retries_jobs.size
 
       job = nil
@@ -78,6 +79,7 @@ module ActiveJob::Cancel::QueueAdapters
     end
 
     def test_cancel_retries_job_with_class_method
+      retries_jobs.map(&:delete)
       assert_equal 0, retries_jobs.size
 
       job = nil
