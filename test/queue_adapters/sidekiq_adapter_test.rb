@@ -123,6 +123,21 @@ module ActiveJob::Cancel::QueueAdapters
       scheduled_jobs.map(&:delete)
     end
 
+    def test_cancel_retries_job_with_provider_job_id
+      assert_equal 0, retries_jobs.size
+
+      execute_with_launcher do
+        FailJob.perform_later
+        sleep 1  # wait for the launcher to run the job
+      end
+      assert_equal 1, retries_jobs.size
+
+      FailJob.cancel_by(provider_job_id: retries_jobs.first.jid)
+      assert_equal 0, retries_jobs.size
+    ensure
+      retries_jobs.map(&:delete)
+    end
+
     private
       def scheduled_jobs
         scheduled_set = Sidekiq::ScheduledSet.new
