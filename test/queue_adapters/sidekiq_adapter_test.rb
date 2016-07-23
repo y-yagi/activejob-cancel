@@ -67,7 +67,7 @@ module ActiveJob::Cancel::QueueAdapters
       job = nil
       execute_with_launcher do
         job = FailJob.perform_later
-        sleep 1  # wait for the launcher to run the job
+        sleep 2  # wait for the launcher to run the job
       end
       assert_equal 1, retries_jobs.size
 
@@ -83,7 +83,7 @@ module ActiveJob::Cancel::QueueAdapters
       job = nil
       execute_with_launcher do
         job = FailJob.perform_later
-        sleep 1  # wait for the launcher to run the job
+        sleep 2  # wait for the launcher to run the job
       end
       assert_equal 1, retries_jobs.size
 
@@ -128,7 +128,7 @@ module ActiveJob::Cancel::QueueAdapters
 
       execute_with_launcher do
         FailJob.perform_later
-        sleep 1  # wait for the launcher to run the job
+        sleep 2  # wait for the launcher to run the job
       end
       assert_equal 1, retries_jobs.size
 
