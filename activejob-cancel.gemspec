@@ -27,5 +27,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "delayed_job"
   spec.add_development_dependency "delayed_job_active_record"
   spec.add_development_dependency "sqlite3"
+  spec.add_development_dependency "sucker_punch"
   spec.add_development_dependency "byebug"
 end
