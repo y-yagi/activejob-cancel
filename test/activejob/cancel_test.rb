@@ -9,7 +9,7 @@ class ActiveJob::CancelTest < Minitest::Test
       job = HelloJob.set(wait: 30.seconds).perform_later
 
       assert_raises(NotImplementedError) do
-        job.cancel(1)
+        job.cancel
       end
     ensure
       ActiveJob::Base.queue_adapter = before_adapter

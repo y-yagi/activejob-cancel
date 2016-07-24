@@ -93,6 +93,16 @@ module ActiveJob::Cancel::QueueAdapters
       retries_jobs.map(&:delete)
     end
 
+    def test_cancel_with_invalid_id
+      queue = Sidekiq::Queue.new('active_job_cancel_test')
+      job = HelloJob.perform_later
+
+      HelloJob.cancel(job.job_id.to_i + 1)
+      assert_equal 1, queue.size
+    ensure
+      queue.clear
+    end
+
     def test_cancel_by_with_invalid_parameters
       assert_raises(ArgumentError) { HelloJob.cancel_by(id: 1) }
     end
@@ -135,6 +145,16 @@ module ActiveJob::Cancel::QueueAdapters
       assert_equal 0, retries_jobs.size
     ensure
       retries_jobs.map(&:delete)
+    end
+
+    def test_cancel_by_with_invalid_job_id
+      queue = Sidekiq::Queue.new('active_job_cancel_test')
+      HelloJob.perform_later
+
+      refute HelloJob.cancel_by(provider_job_id: queue.map.first.jid.to_i + 1)
+      assert_equal 1, queue.size
+    ensure
+      queue.clear
     end
 
     private
