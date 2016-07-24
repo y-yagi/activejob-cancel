@@ -4,6 +4,7 @@
 
 [![Build Status](https://travis-ci.org/y-yagi/activejob-cancel.svg?branch=master)](https://travis-ci.org/y-yagi/activejob-cancel)
 [![Gem Version](https://badge.fury.io/rb/activejob-cancel.svg)](http://badge.fury.io/rb/activejob-cancel)
+[![Code Climate](https://codeclimate.com/github/y-yagi/activejob-cancel/badges/gpa.svg)](https://codeclimate.com/github/y-yagi/activejob-cancel)
 
 ## Installation
 

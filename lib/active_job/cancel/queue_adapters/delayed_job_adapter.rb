@@ -14,7 +14,7 @@ module ActiveJob
           false
         end
 
-        def cancel_by(opts, queue_name)
+        def cancel_by(opts, _queue_name)
           raise ArgumentError, 'Please specify ":provider_job_id"' unless opts[:provider_job_id]
           job_id = opts[:provider_job_id]
 
