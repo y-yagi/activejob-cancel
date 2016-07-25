@@ -14,10 +14,6 @@ module ActiveJob::Cancel::QueueAdapters
     def teardown
     end
 
-    def test_cancel_by_with_invalid_parameters
-      assert_raises(ArgumentError) { HelloJob.cancel_by(id: 1) }
-    end
-
     def test_cancel_with_instance_method
       assert_equal 0, Delayed::Job.count
 
@@ -42,6 +38,14 @@ module ActiveJob::Cancel::QueueAdapters
       Delayed::Job.destroy_all
     end
 
+    def test_cancel_with_invalid_id
+      job = HelloJob.perform_later
+      refute HelloJob.cancel(job.job_id.to_i + 1)
+      assert_equal 1, Delayed::Job.count
+    ensure
+      Delayed::Job.destroy_all
+    end
+
     def test_cancel_with_provider_job_id
       assert_equal 0, Delayed::Job.count
 
@@ -50,6 +54,18 @@ module ActiveJob::Cancel::QueueAdapters
 
       HelloJob.cancel_by(provider_job_id: Delayed::Job.first.id)
       assert_equal 0, Delayed::Job.count
+    ensure
+      Delayed::Job.destroy_all
+    end
+
+    def test_cancel_by_with_invalid_parameters
+      assert_raises(ArgumentError) { HelloJob.cancel_by(id: 1) }
+    end
+
+    def test_cancel_by_with_invalid_job_id
+      HelloJob.perform_later
+      refute HelloJob.cancel_by(provider_job_id: Delayed::Job.first.id + 1)
+      assert_equal 1, Delayed::Job.count
     ensure
       Delayed::Job.destroy_all
     end
