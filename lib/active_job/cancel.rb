@@ -54,4 +54,6 @@ module ActiveJob
   end
 end
 
-ActiveJob::Base.include(ActiveJob::Cancel)
+ActiveSupport.on_load(:active_job) do
+  include(ActiveJob::Cancel)
+end
