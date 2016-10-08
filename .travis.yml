@@ -6,6 +6,7 @@ rvm:
 gemfile:
   - gemfiles/active_job_42.gemfile
   - gemfiles/active_job_50.gemfile
+  - gemfiles/active_job_master.gemfile
 
 before_install: gem install bundler -v 1.11.2
 
