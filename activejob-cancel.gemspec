@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "activerecord", '>= 4.2.0'
   spec.add_development_dependency "delayed_job"
   spec.add_development_dependency "delayed_job_active_record"
+  spec.add_development_dependency "resque"
   spec.add_development_dependency "sqlite3"
   spec.add_development_dependency "byebug"
 end

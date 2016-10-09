@@ -7,7 +7,7 @@ module ActiveJob
   module Cancel
     extend ActiveSupport::Concern
 
-    SUPPORTED_ADAPTERS = %w(Sidekiq DelayedJob).freeze
+    SUPPORTED_ADAPTERS = %w(Sidekiq DelayedJob Resque).freeze
 
     def cancel
       if self.class.can_cancel?
