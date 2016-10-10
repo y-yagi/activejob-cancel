@@ -10,6 +10,11 @@ module ActiveJob
           if job
             Resque.redis.lrem(redis_key_for_queue(queue_name), 0, Resque.encode(job))
             return true
+          else
+            if defined?(Resque.remove_delayed_selection)
+              removed_count = Resque.remove_delayed_selection { |target| target[0]["job_id"] == job_id }
+              return true if removed_count > 0
+            end
           end
 
           false

@@ -31,6 +31,18 @@ module ActiveJob::Cancel::QueueAdapters
       Resque.remove_queue(HelloJob.queue_name)
     end
 
+    def test_cancel_scheduled_job
+      assert_equal 0, delayed_jobs.size
+
+      job = HelloJob.set(wait: 1.hour).perform_later
+      assert_equal 1, delayed_jobs.size
+
+      job.cancel
+      assert_equal 0, delayed_jobs.size
+    ensure
+      Resque.remove_delayed_selection { true }
+    end
+
     def test_cancel_with_invalid_id
       job = HelloJob.perform_later
       refute HelloJob.cancel(job.job_id.to_i + 1)
@@ -38,5 +50,12 @@ module ActiveJob::Cancel::QueueAdapters
     ensure
       Resque.remove_queue(HelloJob.queue_name)
     end
-  end
+
+    private
+      def delayed_jobs
+        Resque.find_delayed_selection do |job|
+          job[0]["job_class"] == "HelloJob" && job[0]["queue_name"] == HelloJob.queue_name
+        end
+      end
+    end
 end
