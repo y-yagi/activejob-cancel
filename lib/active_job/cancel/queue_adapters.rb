@@ -5,6 +5,7 @@ module ActiveJob
 
       autoload :SidekiqAdapter
       autoload :DelayedJobAdapter
+      autoload :ResqueAdapter
     end
   end
 end
