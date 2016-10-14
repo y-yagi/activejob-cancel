@@ -4,7 +4,7 @@ require 'sidekiq/cli'
 Sidekiq.logger = Logger.new(nil)
 
 def execute_with_launcher
-  sidekiq = Sidekiq::Launcher.new({queues: ["active_job_cancel_failed_job"],
+  sidekiq = Sidekiq::Launcher.new({queues: [FailJob.queue_name.call],
                                    environment: "test",
                                    concurrency: 1,
                                    timeout: 1,
