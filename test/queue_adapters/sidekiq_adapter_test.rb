@@ -6,13 +6,15 @@ module ActiveJob::Cancel::QueueAdapters
   class ActiveJob::Cancel::QueueAdapters::SidekiqAdapterTest< Minitest::Test
     def setup
       ActiveJob::Base.queue_adapter = :sidekiq
+      @hello_job_queue_name = HelloJob.queue_name.call
+      @fail_job_queue_name = FailJob.queue_name.call
     end
 
     def teardown
     end
 
     def test_cancel_queued_job_with_instance_method
-      queue = Sidekiq::Queue.new('active_job_cancel_test')
+      queue = Sidekiq::Queue.new(@hello_job_queue_name)
       assert_equal 0, queue.size
 
       job = HelloJob.perform_later
@@ -25,7 +27,7 @@ module ActiveJob::Cancel::QueueAdapters
     end
 
     def test_cancel_queued_job_with_class_method
-      queue = Sidekiq::Queue.new('active_job_cancel_test')
+      queue = Sidekiq::Queue.new(@hello_job_queue_name)
       assert_equal 0, queue.size
 
       job = HelloJob.perform_later
@@ -94,7 +96,7 @@ module ActiveJob::Cancel::QueueAdapters
     end
 
     def test_cancel_with_invalid_id
-      queue = Sidekiq::Queue.new('active_job_cancel_test')
+      queue = Sidekiq::Queue.new(@hello_job_queue_name)
       job = HelloJob.perform_later
 
       HelloJob.cancel(job.job_id.to_i + 1)
@@ -108,13 +110,13 @@ module ActiveJob::Cancel::QueueAdapters
     end
 
     def test_cancel_queued_job_with_provider_job_id
-      queue = Sidekiq::Queue.new('active_job_cancel_test')
+      queue = Sidekiq::Queue.new(@hello_job_queue_name)
       assert_equal 0, queue.size
 
       HelloJob.perform_later
       assert_equal 1, queue.size
 
-      queue = Sidekiq::Queue.new(HelloJob.queue_name)
+      queue = Sidekiq::Queue.new(@hello_job_queue_name)
       HelloJob.cancel_by(provider_job_id: queue.map.first.jid)
       assert_equal 0, queue.size
     ensure
@@ -148,7 +150,7 @@ module ActiveJob::Cancel::QueueAdapters
     end
 
     def test_cancel_by_with_invalid_job_id
-      queue = Sidekiq::Queue.new('active_job_cancel_test')
+      queue = Sidekiq::Queue.new(@hello_job_queue_name)
       HelloJob.perform_later
 
       refute HelloJob.cancel_by(provider_job_id: queue.map.first.jid.to_i + 1)
@@ -161,14 +163,15 @@ module ActiveJob::Cancel::QueueAdapters
       def scheduled_jobs
         scheduled_set = Sidekiq::ScheduledSet.new
         scheduled_set.select do |scheduled_job|
-          scheduled_job.args.first['queue_name'] == 'active_job_cancel_test'
+          scheduled_job.args.first['queue_name'] == @hello_job_queue_name
         end
       end
 
       def retries_jobs
         retry_set = Sidekiq::RetrySet.new
         retry_set.select do |retry_job|
-          retry_job.args.first['queue_name'] == 'active_job_cancel_failed_job'
+          retry_job.args.first
+          retry_job.args.first['queue_name'] == @fail_job_queue_name
         end
       end
   end

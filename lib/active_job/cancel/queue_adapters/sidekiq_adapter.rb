@@ -5,6 +5,7 @@ module ActiveJob
     module QueueAdapters
       class SidekiqAdapter
         def cancel(job_id, queue_name)
+          queue_name = queue_name.call if queue_name.is_a?(Proc)
           job = find_job_by_job_id(job_id, queue_name)
 
           if job
@@ -18,6 +19,7 @@ module ActiveJob
         def cancel_by(opts, queue_name)
           raise ArgumentError, 'Please specify ":provider_job_id"' unless opts[:provider_job_id]
 
+          queue_name = queue_name.call if queue_name.is_a?(Proc)
           job = find_job_by_provider_job_id(opts[:provider_job_id], queue_name)
           if job
             job.delete

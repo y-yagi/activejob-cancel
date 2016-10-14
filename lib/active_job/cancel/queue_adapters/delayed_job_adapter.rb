@@ -6,6 +6,7 @@ module ActiveJob
     module QueueAdapters
       class DelayedJobAdapter
         def cancel(job_id, queue_name)
+          queue_name = queue_name.call if queue_name.is_a?(Proc)
           job = find_job(job_id, queue_name)
           if job
             job.destroy
