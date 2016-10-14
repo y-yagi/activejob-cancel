@@ -1,6 +1,6 @@
 # ActiveJob::Cancel
 
-`activejob-cancel` provides cancel method to Active Job. Currently it supports only `Sidekiq` and `Delayed Job`.
+`activejob-cancel` provides cancel method to Active Job. Currently it supports only `Sidekiq`, `Delayed Job` and `resque`.
 
 [![Build Status](https://travis-ci.org/y-yagi/activejob-cancel.svg?branch=master)](https://travis-ci.org/y-yagi/activejob-cancel)
 [![Gem Version](https://badge.fury.io/rb/activejob-cancel.svg)](http://badge.fury.io/rb/activejob-cancel)
