@@ -58,5 +58,5 @@ module ActiveJob::Cancel::QueueAdapters
           job[0]["job_class"] == "HelloJob" && job[0]["queue_name"] == @hello_job_queue_name
         end
       end
-    end
+  end
 end
