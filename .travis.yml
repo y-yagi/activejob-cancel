@@ -6,9 +6,10 @@ rvm:
 gemfile:
   - gemfiles/active_job_42.gemfile
   - gemfiles/active_job_50.gemfile
+  - gemfiles/active_job_51.gemfile
   - gemfiles/active_job_master.gemfile
 
-before_install: gem install bundler -v 1.11.2
+before_install: gem install bundler
 
 services:
   - redis
