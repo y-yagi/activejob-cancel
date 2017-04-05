@@ -11,5 +11,9 @@ gemfile:
 
 before_install: gem install bundler
 
+matrix:
+  allow_failures:
+  - gemfile: gemfiles/active_job_master.gemfile
+
 services:
   - redis
