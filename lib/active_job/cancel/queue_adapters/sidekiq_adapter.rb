@@ -42,17 +42,17 @@ module ActiveJob
 
           def find_job_from_queue(job_id, queue_name)
             queue = Sidekiq::Queue.new(queue_name)
-            queue.detect { |j| j.args.first['job_id'] == job_id }
+            queue.detect { |j| j.args.first.is_a?(Hash) && j.args.first['job_id'] == job_id }
           end
 
           def find_job_from_scheduled_set(job_id)
             scheduled_set = Sidekiq::ScheduledSet.new
-            scheduled_set.detect { |j| j.args.first['job_id'] == job_id }
+            scheduled_set.detect { |j| j.args.first.is_a?(Hash) && j.args.first['job_id'] == job_id }
           end
 
           def find_job_from_retry_set(job_id)
             scheduled_set = Sidekiq::RetrySet.new
-            scheduled_set.detect { |j| j.args.first['job_id'] == job_id }
+            scheduled_set.detect { |j| j.args.first.is_a?(Hash) && j.args.first['job_id'] == job_id }
           end
       end
     end

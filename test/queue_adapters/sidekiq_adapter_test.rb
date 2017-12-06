@@ -159,6 +159,22 @@ module ActiveJob::Cancel::QueueAdapters
       queue.clear
     end
 
+    def test_cancel_when_queue_contains_not_an_active_job_worker
+      queue = Sidekiq::Queue.new(@hello_job_queue_name)
+
+      NotAnActiveJobWorker.set(queue: @hello_job_queue_name).perform_async
+      assert_equal 1, queue.size
+
+      job = HelloJob.perform_later
+      assert_equal 2, queue.size
+
+      # Expect this doesn't throw any exception
+      HelloJob.cancel(job.job_id)
+      assert_equal 1, queue.size
+    ensure
+      queue.clear
+    end
+
     private
       def scheduled_jobs
         scheduled_set = Sidekiq::ScheduledSet.new
