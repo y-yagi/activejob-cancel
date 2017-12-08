@@ -1,5 +1,6 @@
 require 'sidekiq/launcher'
 require 'sidekiq/cli'
+require_relative 'workers/not_an_active_job_worker'
 
 Sidekiq.logger = Logger.new(nil)
 
