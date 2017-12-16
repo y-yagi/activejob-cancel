@@ -1,13 +1,14 @@
 require 'active_support'
 require 'active_job'
 require 'active_job/cancel/queue_adapters'
+require 'active_job/cancel/queue_adapters/test_adapter'
 require 'active_job/cancel/version'
 
 module ActiveJob
   module Cancel
     extend ActiveSupport::Concern
 
-    SUPPORTED_ADAPTERS = %w(Sidekiq DelayedJob Resque).freeze
+    SUPPORTED_ADAPTERS = %w(Sidekiq DelayedJob Resque Test).freeze
 
     def cancel
       if self.class.can_cancel?
