@@ -1,8 +1,8 @@
 language: ruby
 rvm:
-  - 2.2.7
-  - 2.3.4
-  - 2.4.1
+  - 2.2.9
+  - 2.3.6
+  - 2.4.3
 
 gemfile:
   - gemfiles/active_job_42.gemfile
@@ -17,9 +17,9 @@ matrix:
   allow_failures:
     - gemfile: gemfiles/active_job_master.gemfile
   exclude:
-    - rvm: 2.2.7
+    - rvm: 2.2.9
       gemfile: gemfiles/active_job_master.gemfile
-    - rvm: 2.3.4
+    - rvm: 2.3.6
       gemfile: gemfiles/active_job_master.gemfile
 
 services:
