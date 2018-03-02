@@ -15,7 +15,12 @@ before_install: gem install bundler
 
 matrix:
   allow_failures:
-  - gemfile: gemfiles/active_job_master.gemfile
+    - gemfile: gemfiles/active_job_master.gemfile
+  exclude:
+    - rvm: 2.2.7
+      gemfile: gemfiles/active_job_master.gemfile
+    - rvm: 2.3.4
+      gemfile: gemfiles/active_job_master.gemfile
 
 services:
   - redis
