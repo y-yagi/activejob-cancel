@@ -7,8 +7,8 @@ module ActiveJob
     # on a persisted id to fulfill the canceling of any given job id.
     class TestAdapter
       def initialize
-        if Gem::Requirement.new('~> 5.0').satisfied_by? ActiveJob.version
-          require 'active_job/cancel/queue_adapters/test_adapter/rails_5'
+        if Gem::Requirement.new('>= 5.0').satisfied_by? ActiveJob.version
+          require 'active_job/cancel/queue_adapters/test_adapter/rails'
         elsif Gem::Requirement.new('~> 4.2').satisfied_by? ActiveJob.version
           require 'active_job/cancel/queue_adapters/test_adapter/rails_4'
         end
