@@ -175,6 +175,35 @@ module ActiveJob::Cancel::QueueAdapters
       queue.clear
     end
 
+    def test_cancel_default_queue_name_job_with_class_method
+      default_queue_name = "default"
+      queue = Sidekiq::Queue.new(default_queue_name)
+      assert_equal 0, queue.size
+
+      job = DefaultQueueNameJob.perform_later
+      assert_equal 1, queue.size
+
+      DefaultQueueNameJob.cancel(job.job_id)
+      assert_equal 0, queue.size
+    ensure
+      queue&.clear
+    end
+
+    def test_cancel_by_default_queue_name_job
+      default_queue_name = "default"
+      queue = Sidekiq::Queue.new(default_queue_name)
+      assert_equal 0, queue.size
+
+      job = DefaultQueueNameJob.perform_later
+      assert_equal 1, queue.size
+
+      queue = Sidekiq::Queue.new(default_queue_name)
+      DefaultQueueNameJob.cancel_by(provider_job_id: queue.map.first.jid)
+      assert_equal 0, queue.size
+    ensure
+      queue&.clear
+    end
+
     private
       def scheduled_jobs
         scheduled_set = Sidekiq::ScheduledSet.new
