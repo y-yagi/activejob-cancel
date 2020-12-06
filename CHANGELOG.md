@@ -2,6 +2,10 @@
 
 Nothing
 
+## 0.3.1
+
+* Fix `NoMethodError` when using the cancel methods with the default queue name
+
 ## 0.3.0
 
 * Add support for Active Job `TestAdapter` #19 [Hermann Mayer]
