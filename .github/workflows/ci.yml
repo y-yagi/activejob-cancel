@@ -1,0 +1,46 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+    name: Ruby ${{ matrix.ruby }}, Rails ${{ matrix.gemfile }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby: [ "2.7", "2.3" ]
+        gemfile: [ "active_job_60.gemfile", "active_job_52.gemfile", "active_job_51.gemfile", "active_job_50.gemfile", "active_job_42.gemfile" ]
+        exclude:
+          - ruby: "2.3"
+            gemfile: "active_job_60.gemfile"
+          - ruby: "2.7"
+            gemfile: "active_job_42.gemfile"
+          - ruby: "2.6"
+            gemfile: "active_job_42.gemfile"
+
+    services:
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+        # Wait for starting Redis
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile}}
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+    - name: Install dependencies
+      run: |
+        gem install bundler --no-document
+        bundle install
+    - name: Run test
+      run: bundle exec rake
