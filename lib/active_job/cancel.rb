@@ -21,7 +21,7 @@ module ActiveJob
     module ClassMethods
       def cancel(job_id)
         if can_cancel?
-          cancel_adapter_class.new.cancel(job_id, self.queue_name)
+          cancel_adapter_class.new.cancel(job_id, self.new.queue_name)
         else
           raise NotImplementedError, 'This queueing backend does not support cancel.'
         end
@@ -29,7 +29,7 @@ module ActiveJob
 
       def cancel_by(opts)
         if can_cancel?
-          cancel_adapter_class.new.cancel_by(opts, self.queue_name)
+          cancel_adapter_class.new.cancel_by(opts, self.new.queue_name)
         else
           raise NotImplementedError, 'This queueing backend does not support cancel_by.'
         end
