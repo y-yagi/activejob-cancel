@@ -2,7 +2,7 @@
 
 `activejob-cancel` provides cancel method to Active Job. Currently it supports only `Sidekiq`, `Delayed Job`, `resque` and the Active Job `TestAdapter`.
 
-[![Build Status](https://github.com/y-yagi/activejob-cancel/workflows/CI/badge.svg)]
+![Build Status](https://github.com/y-yagi/activejob-cancel/workflows/CI/badge.svg)
 [![Gem Version](https://badge.fury.io/rb/activejob-cancel.svg)](http://badge.fury.io/rb/activejob-cancel)
 [![Code Climate](https://codeclimate.com/github/y-yagi/activejob-cancel/badges/gpa.svg)](https://codeclimate.com/github/y-yagi/activejob-cancel)
 [![Coverage Status](https://coveralls.io/repos/github/y-yagi/activejob-cancel/badge.svg?branch=master)](https://coveralls.io/github/y-yagi/activejob-cancel?branch=master)
