@@ -1,7 +1,10 @@
 require 'test_helper'
+require 'active_job/test_helper'
 
 module ActiveJob::Cancel::QueueAdapters
   class ActiveJob::Cancel::QueueAdapters::TestAdapterTest< Minitest::Test
+    include ActiveJob::TestHelper
+
     def setup
       ActiveJob::Base.queue_adapter = :test
       @hello_job_queue_name = HelloJob.queue_name.call
@@ -101,6 +104,18 @@ module ActiveJob::Cancel::QueueAdapters
 
       refute HelloJob.cancel_by(provider_job_id: queue.map.first[:id].to_i + 1)
       assert_equal 1, queue.size
+    ensure
+      queue.clear
+    end
+
+    def test_activejob_assert_enqueued_with
+      assert_no_enqueued_jobs
+      HelloJob.perform_later('jeremy')
+      assert_enqueued_jobs 1
+
+      assert_enqueued_with(job: HelloJob) do
+        HelloJob.perform_later
+      end
     ensure
       queue.clear
     end
