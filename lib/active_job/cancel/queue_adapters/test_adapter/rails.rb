@@ -5,6 +5,7 @@ module ActiveJob
         # These values should match up with what other ActiveJob::QueueAdapters publish. At minimum, job_class, job_id...
         # Otherwise, ActiveJob test helpers like assert_enqueued_with will break.
         HashWithIndifferentAccess.new({
+          id: job.job_id,
           job_id: job.job_id,
           job: job.class,
           job_class: job.class.to_s,
