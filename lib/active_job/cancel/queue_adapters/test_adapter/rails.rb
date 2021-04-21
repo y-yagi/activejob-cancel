@@ -3,8 +3,9 @@ module ActiveJob
     class TestAdapter
       def job_to_hash(job, extras = {})
         {
-          id: job.job_id,
+          job_id: job.job_id,
           job: job.class,
+          job_class: job.class.to_s,
           args: job.serialize.fetch('arguments'),
           queue: job.queue_name
         }.merge!(extras)
