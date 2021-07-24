@@ -2,6 +2,10 @@
 
 Nothing
 
+## 0.3.2
+
+* Use same keys and key types as other QueueAdapters do, to not break ActiveJob test helpers #33 [Brian Moran]
+
 ## 0.3.1
 
 * Fix `NoMethodError` when using the cancel methods with the default queue name
