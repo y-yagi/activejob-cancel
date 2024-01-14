@@ -6,6 +6,7 @@ jobs:
   build:
     name: Ruby ${{ matrix.ruby }}, Rails ${{ matrix.gemfile }}
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     strategy:
       matrix:
         ruby: [ "2.7", "2.3" ]
