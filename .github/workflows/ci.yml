@@ -9,15 +9,8 @@ jobs:
     timeout-minutes: 5
     strategy:
       matrix:
-        ruby: [ "2.7", "2.3" ]
-        gemfile: [ "active_job_60.gemfile", "active_job_52.gemfile", "active_job_51.gemfile", "active_job_50.gemfile", "active_job_42.gemfile" ]
-        exclude:
-          - ruby: "2.3"
-            gemfile: "active_job_60.gemfile"
-          - ruby: "2.7"
-            gemfile: "active_job_42.gemfile"
-          - ruby: "2.6"
-            gemfile: "active_job_42.gemfile"
+        ruby: [ "3.2", "3.1", "3.0" ]
+        gemfile: [ "active_job_71.gemfile", "active_job_70.gemfile", "active_job_61.gemfile", "active_job_60.gemfile" ]
 
     services:
       redis:
