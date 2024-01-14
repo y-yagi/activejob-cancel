@@ -1,0 +1,13 @@
+source 'https://rubygems.org'
+
+gem 'coveralls', require: false
+gem 'rake'
+gem 'sidekiq'
+gem 'delayed_job'
+gem 'delayed_job_active_record', '>= 4.1.2'
+gem 'resque'
+gem 'resque-scheduler'
+gem 'sqlite3'
+gem 'activesupport', '~> 7.0.0'
+gem 'activejob', '~> 7.0.0'
+gem 'activerecord', '~> 7.0.0'
