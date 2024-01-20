@@ -30,6 +30,7 @@ def execute_with_launcher
 
   sidekiq = Sidekiq::Launcher.new(config)
   sidekiq.run
+  sleep 0.2
   yield
   sidekiq.stop
 end
