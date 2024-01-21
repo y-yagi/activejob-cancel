@@ -19,15 +19,4 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'activejob', '>= 4.2.0'
   spec.add_dependency 'activesupport', '>= 4.2.0'
-  spec.add_development_dependency "bundler"
-  spec.add_development_dependency "rake"
-  spec.add_development_dependency "minitest"
-  spec.add_development_dependency "sidekiq"
-  spec.add_development_dependency "activerecord", '>= 4.2.0'
-  spec.add_development_dependency "delayed_job"
-  spec.add_development_dependency "delayed_job_active_record"
-  spec.add_development_dependency "resque"
-  spec.add_development_dependency "resque-scheduler"
-  spec.add_development_dependency "sqlite3"
-  spec.add_development_dependency "byebug"
 end
