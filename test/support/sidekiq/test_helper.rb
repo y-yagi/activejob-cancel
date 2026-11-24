@@ -9,14 +9,17 @@ end
 def execute_with_launcher
   if Gem::Version.new(Sidekiq::VERSION) >= Gem::Version.new("7")
     config = Sidekiq.default_configuration
-    config.queues = [FailJob.queue_name.call]
-    config.concurrency = 1
-    config.average_scheduled_poll_interval = 0.5
-    config.merge!(
-      environment: "test",
-      timeout: 1,
-      poll_interval_average: 3
-    )
+    # Sidekiq 8+ freezes the configuration once a launcher runs, so configure it only once.
+    unless config.instance_variable_get(:@options).frozen?
+      config.queues = [FailJob.queue_name.call]
+      config.concurrency = 1
+      config.average_scheduled_poll_interval = 0.5
+      config.merge!(
+        environment: "test",
+        timeout: 1,
+        poll_interval_average: 3
+      )
+    end
   else
     config = {
       queues: [FailJob.queue_name.call],
