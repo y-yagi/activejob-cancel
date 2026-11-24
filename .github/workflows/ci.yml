@@ -14,7 +14,7 @@ jobs:
 
     services:
       redis:
-        image: redis
+        image: redis:8.12.0@sha256:3c4881844c6421f29fb9f9e8ca4f573d9fbdfb35967d65834504b6994cf6cd3b
         ports:
           - 6379:6379
         # Wait for starting Redis
@@ -28,8 +28,8 @@ jobs:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile}}
 
     steps:
-    - uses: actions/checkout@v4
-    - uses: ruby/setup-ruby@v1
+    - uses: actions/checkout@v7.0.1
+    - uses: ruby/setup-ruby@v1.344.0
       with:
         ruby-version: ${{ matrix.ruby }}
     - name: Install dependencies
